@@ -1,0 +1,126 @@
+import {BadRequestException, Injectable} from '@nestjs/common'
+import {CreateCustomerDto} from './dto/create-customer.dto'
+import {UpdateCustomerDto} from './dto/update-customer.dto'
+import {PrismaService} from '../prisma.service'
+import {Prisma, Customer} from '@prisma/client'
+import {validateCpf} from './utils/validators'
+import * as bcrypt from 'bcrypt'
+import {JwtService} from '@nestjs/jwt'
+
+type CustomerResponse = Omit<Customer, 'password'>
+
+type CreateCustomerResponse = CustomerResponse & {
+    accessToken: string
+}
+
+@Injectable()
+export class CustomersService {
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly jwtService: JwtService
+    ) {}
+    async createCustomer(createCustomerInput: CreateCustomerDto): Promise<CreateCustomerResponse> {
+        const isValidCpf = validateCpf(createCustomerInput.cpf)
+
+        if (!isValidCpf) {
+            throw new BadRequestException('Invalid CPF', {
+                cause: isValidCpf,
+                description: 'CPF não válido, verifique se o CPF foi digitado corretamente'
+            })
+        }
+        const existingCustomer = await this.prisma.customer.findFirst({
+            where: {
+                OR: [
+                    {
+                        email: createCustomerInput.email
+                    },
+                    {
+                        cpf: createCustomerInput.cpf
+                    }
+                ]
+            }
+        })
+
+        if (existingCustomer) {
+            throw new BadRequestException('Customer already exists', {
+                cause: existingCustomer,
+                description: 'Usuário já cadastrado'
+            })
+        }
+
+        const saltOrRounds = 10
+        const hashedPassword = await bcrypt.hash(createCustomerInput.password, saltOrRounds)
+
+        const customer = await this.prisma.customer.create({
+            data: {...createCustomerInput, password: hashedPassword},
+            select: {
+                id: true,
+                email: true,
+                name: true,
+                cpf: true
+            }
+        })
+
+        const payload = {id: customer.id, sub: customer.id}
+        const accessToken = this.jwtService.sign(payload)
+
+        return {
+            ...customer,
+            accessToken
+        }
+    }
+
+    findAll(): Promise<CustomerResponse[]> {
+        return this.prisma.customer.findMany({
+            omit: {password: true}
+        })
+    }
+
+    async getById(customerId: string): Promise<CustomerResponse> {
+        const customer = await this.prisma.customer.findUnique({
+            where: {id: customerId},
+            omit: {password: true}
+        })
+
+        if (!customer) {
+            throw new Error('Customer not found')
+        }
+        return customer
+    }
+
+    async getByCpf(cpf: string): Promise<CustomerResponse> {
+        const customer = await this.prisma.customer.findUnique({
+            where: {cpf: cpf},
+            omit: {password: true}
+        })
+
+        if (!customer) {
+            throw new Error('Customer not found')
+        }
+        return customer
+    }
+
+    async update(
+        customerId: string,
+        data: Partial<Prisma.CustomerCreateInput>
+    ): Promise<CustomerResponse> {
+        const customer = await this.prisma.customer.findUnique({
+            where: {id: customerId},
+            omit: {password: true}
+        })
+
+        if (!customer) {
+            throw new Error('Customer not found')
+        }
+
+        const updatedCustomer = await this.prisma.customer.update({where: {id: customerId}, data})
+
+        return updatedCustomer
+    }
+
+    async remove(customerId: string): Promise<boolean> {
+        await this.prisma.customer.delete({where: {id: customerId}})
+
+        return true
+    }
+}
