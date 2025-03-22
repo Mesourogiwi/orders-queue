@@ -1,14 +1,10 @@
 import {Controller, Get, Post, Body, Param} from '@nestjs/common'
 import {OrdersService} from './orders.service'
 import {CreateOrderDto} from './dto/create-order.dto'
-import {SqsService} from '../sqs/sqs.service'
 
 @Controller('orders')
 export class OrdersController {
-    constructor(
-        private readonly ordersService: OrdersService,
-        private sqsService: SqsService
-    ) {}
+    constructor(private readonly ordersService: OrdersService) {}
 
     @Post()
     create(@Body() createOrderDto: CreateOrderDto) {

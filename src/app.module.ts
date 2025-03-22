@@ -7,10 +7,12 @@ import {OrdersModule} from './orders/orders.module'
 import {ItemsModule} from './items/items.module'
 import {SqsModule} from './sqs/sqs.module'
 import {ConsumerService} from './sqs/consumer.service'
+import {CreateOrderListener} from './orders/listeners/createOrder.listener'
+import {PrismaService} from './prisma.service'
 
 @Module({
     imports: [CustomersModule, AuthModule, OrdersModule, ItemsModule, SqsModule],
     controllers: [AppController],
-    providers: [AppService, ConsumerService]
+    providers: [AppService, ConsumerService, CreateOrderListener, PrismaService]
 })
 export class AppModule {}

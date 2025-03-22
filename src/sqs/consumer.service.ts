@@ -1,10 +1,14 @@
 // consumer.service.ts
 import {Injectable, OnModuleInit} from '@nestjs/common'
 import {SqsService} from './sqs.service'
+import {CreateOrderListener} from '../orders/listeners/createOrder.listener'
 
 @Injectable()
 export class ConsumerService implements OnModuleInit {
-    constructor(private readonly sqsService: SqsService) {}
+    constructor(
+        private readonly sqsService: SqsService,
+        private readonly createOrderListener: CreateOrderListener
+    ) {}
 
     async onModuleInit() {
         this.pollMessages()
@@ -16,10 +20,11 @@ export class ConsumerService implements OnModuleInit {
             for (const msg of messages) {
                 try {
                     const payload = JSON.parse(msg.Body)
-                    // Aqui você processa o payload
-                    console.log('Mensagem recebida:', payload)
 
-                    // Após o processamento com sucesso
+                    if (payload.eventName === 'order.created') {
+                        await this.createOrderListener.handle(payload.data)
+                    }
+
                     await this.sqsService.deleteMessage(msg.ReceiptHandle)
                 } catch (err) {
                     console.error('Erro ao processar mensagem:', err)

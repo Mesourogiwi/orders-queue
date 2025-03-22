@@ -7,13 +7,19 @@ import {
     DeleteMessageCommand
 } from '@aws-sdk/client-sqs'
 
+export interface MessageBody {
+    eventName: string
+    data: any
+    timestamp: string
+}
+
 @Injectable()
 export class SqsService {
     constructor(@Inject('SQS_CLIENT') private readonly sqsClient: SQSClient) {}
 
     private readonly queueUrl = process.env.SQS_QUEUE_URL
 
-    async sendMessage(messageBody: any): Promise<void> {
+    async sendMessage(messageBody: MessageBody): Promise<void> {
         const command = new SendMessageCommand({
             QueueUrl: this.queueUrl,
             MessageBody: JSON.stringify(messageBody)

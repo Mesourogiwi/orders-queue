@@ -21,60 +21,6 @@ export class OrdersService {
         return {
             message: 'Pedido enviado para a fila com sucesso!'
         }
-        // const existingOrder = await this.prisma.order.findUnique({where: {id: createOrderDto.id}})
-
-        // if (existingOrder) {
-        //     throw new Error('Order already exists')
-        // }
-
-        // let totalAmount = 0
-
-        // for (const item of createOrderDto.orderItems) {
-        //     const existingItem = await this.prisma.item.findUnique({where: {id: item.id}})
-
-        //     if (!existingItem) {
-        //         throw new Error('Item not found')
-        //     }
-
-        //     if (existingItem.quantity < item.quantity) {
-        //         throw new Error('Insufficient quantity of item')
-        //     }
-
-        //     totalAmount += existingItem.price * item.quantity
-        // }
-
-        // let order: Order | null = null
-
-        // await this.prisma.$transaction(async tx => {
-        //     order = await tx.order.create({
-        //         data: {
-        //             id: createOrderDto.id,
-        //             customerId: createOrderDto.customerId,
-        //             totalAmount
-        //         }
-        //     })
-
-        //     for (const item of createOrderDto.orderItems) {
-        //         await tx.orderItems.create({
-        //             data: {
-        //                 orderId: createOrderDto.id,
-        //                 itemId: item.id
-        //             }
-        //         })
-        //         await tx.item.update({
-        //             where: {
-        //                 id: item.id
-        //             },
-        //             data: {
-        //                 quantity: {
-        //                     decrement: item.quantity
-        //                 }
-        //             }
-        //         })
-        //     }
-        // })
-
-        // return order
     }
 
     findAll() {
