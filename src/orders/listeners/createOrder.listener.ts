@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common'
+import {Injectable, Logger} from '@nestjs/common'
 import {PrismaService} from '../../prisma.service'
 import {CreateOrderDto} from '../dto/create-order.dto'
 import {Order, OrderStatus} from '@prisma/client'
@@ -10,6 +10,7 @@ type messageData = CreateOrderDto & {
 export class CreateOrderListener {
     constructor(private readonly prisma: PrismaService) {}
     async handle(data: messageData) {
+        Logger.log('Handling message create order', data)
         let order: Order | null = null
 
         await this.prisma.$transaction(async tx => {

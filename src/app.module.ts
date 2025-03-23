@@ -9,10 +9,21 @@ import {SqsModule} from './sqs/sqs.module'
 import {ConsumerService} from './sqs/consumer.service'
 import {CreateOrderListener} from './orders/listeners/createOrder.listener'
 import {PrismaService} from './prisma.service'
+import {APP_GUARD} from '@nestjs/core'
+import {AuthGuard} from './auth/auth.guard'
 
 @Module({
     imports: [CustomersModule, AuthModule, OrdersModule, ItemsModule, SqsModule],
     controllers: [AppController],
-    providers: [AppService, ConsumerService, CreateOrderListener, PrismaService]
+    providers: [
+        AppService,
+        ConsumerService,
+        CreateOrderListener,
+        PrismaService,
+        {
+            provide: APP_GUARD,
+            useClass: AuthGuard
+        }
+    ]
 })
 export class AppModule {}

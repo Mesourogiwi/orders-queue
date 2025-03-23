@@ -28,7 +28,7 @@ export class AuthService {
                 description: 'Usuário ou senha inválidos'
             })
         }
-        const payload = {id: customer.id, sub: customer.id}
+        const payload = {id: customer.id, sub: customer.id, role: customer.role}
 
         const accessToken = this.jwtService.sign(payload)
 
@@ -37,7 +37,8 @@ export class AuthService {
                 id: customer.id,
                 name: customer.name,
                 email: customer.email,
-                cpf: customer.cpf
+                cpf: customer.cpf,
+                role: customer.role
             },
             accessToken
         }

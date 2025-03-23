@@ -2,7 +2,7 @@ import {BadRequestException, Injectable} from '@nestjs/common'
 import {CreateCustomerDto} from './dto/create-customer.dto'
 import {UpdateCustomerDto} from './dto/update-customer.dto'
 import {PrismaService} from '../prisma.service'
-import {Prisma, Customer} from '@prisma/client'
+import {Prisma, Customer, Roles} from '@prisma/client'
 import {validateCpf} from './utils/validators'
 import * as bcrypt from 'bcrypt'
 import {JwtService} from '@nestjs/jwt'
@@ -56,7 +56,7 @@ export class CustomersService {
             omit: {password: true}
         })
 
-        const payload = {id: customer.id, sub: customer.id}
+        const payload = {id: customer.id, sub: customer.id, role: customer.role}
         const accessToken = this.jwtService.sign(payload)
 
         return {
