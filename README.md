@@ -70,7 +70,7 @@ As operações limitadas a admin são:
 
 ### Fluxo sugerido 🏄‍♂️
 
-Após rodar o comando para semar o banco de dados com um usuário do tipo `ADMIN`, recomendo seguir os passos:
+Após rodar o comando para alimentar o banco de dados com um usuário do tipo `ADMIN`, recomendo seguir os passos:
 
 1. Logar com o usuário ADMIN através do endpoint `POST /auth/login`, passando o cpf e senha no corpo da requisição e pegar seu respectivo token;
 2. Acessar o endpoint para criar um novo item `POST /items`, passando o nome, preço e quantidade em estoque do item;
