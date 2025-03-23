@@ -46,7 +46,48 @@ $ npm run start
 $ npm run start:dev
 ```
 
-## Comandos de teste 🧪
+## Testando o projeto manualmente 👷
+
+Para testar com alguns dados locais, você vai precisar de um usuário do tipo `ADMIN` para realizar certas ações, principalmente para cadastrar os itens no sistema. Para isso, deixei um script pronto para rodar e você ter acesso a essas operações. Basta rodar o comando
+
+```bash
+$ npx prisma db seed
+```
+
+Lembrando que é necessário ter o seu .env atualizado, como descrito acima, pois pra esse comando é necessário ter as variáveis de ambiente `ADMIN_SEED_PASSWORD`, `ADMIN_SEED_EMAIL` e `ADMIN_SEED_CPF`.
+
+As operações limitadas a admin são:
+
+- CUSTOMERS: Retornar todos os dados e deletar um customer
+- ITEMS: Criar, atualizar e deletar um item
+- ORDERS: Atualizar status do pedido e retornar todos os pedidos
+
+### Fluxo sugerido 🏄‍♂️
+
+Após rodar o comando para semar o banco de dados com um usuário do tipo `ADMIN`, recomendo seguir os passos:
+
+1. Logar com o usuário ADMIN através do endpoint `POST /auth/login`, passando o cpf e senha no corpo da requisição e pegar seu respectivo token;
+2. Acessar o endpoint para criar um novo item `POST /items`, passando o nome, preço e quantidade em estoque do item;
+3. Cadastrar um novo usuário do tipo `CUSTOMER`, através do endpoint `POST /customers`, passando cpf, email, nome e senha no corpo da requisição.;
+   3.1 Para isso, é necessário passar um cpf válido, recomendo que use um gerador de cpf como esse [site](https://www.4devs.com.br/gerador_de_cpf)
+4. Criar um novo pedido através do endpoint `POST /orders`, passando o id do pedido, id do customer e um array `orderItems` passando o id do(s) item(s), bem como a quantidade
+5. Isso deve chamar a fila e, posteriormente, pode ser visualizado se o pedido foi criado pelo endpoint `GET /orders/:id` com o ID de pedido passado no passo anterior.
+
+O fluxo descrito acima é o fluxo feliz, mas recomendo fortemente fazer alguns testes como:
+
+- Tentar acessar endpoints acessíveis apenas para `ADMINS` para um usuário comum, passando o accessToken gerado pelo JWT de um usuário sem essas permissões;
+- Tentar passar credenciais inválidas no login;
+- Tentar criar um pedido com um ID já existente;
+- Tentar passar um customerId inválido na hora da criação de um pedido;
+- Tentar colocar uma quantidade maior de itens no pedido do que itens do estoque;
+
+Além é claro, de testar TODOS os endpoints disponibilizados pela API.
+
+Os testes podem ser feitos através do próprio [Swagger](https://orders-queue-production.up.railway.app/docs) que foi upado pelo serviço de cloud, mas nada impede de usar um Postman para esses testes
+
+Também é recomendado rodar os testes locais pelos comandos descritos abaixo
+
+## Comandos de testes automatizados 🧪
 
 Rode os comandos abaixo para rodar os testes localmente:
 
