@@ -11,7 +11,7 @@ type signInParams = {
 
 type signInResponse = {
     accessToken: string
-    customer: Omit<Customer, 'password'>
+    customer: Omit<Customer, 'password' | 'createdAt' | 'updatedAt'>
 }
 @Injectable()
 export class AuthService {

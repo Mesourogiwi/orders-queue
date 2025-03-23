@@ -53,12 +53,7 @@ export class CustomersService {
 
         const customer = await this.prisma.customer.create({
             data: {...createCustomerInput, password: hashedPassword},
-            select: {
-                id: true,
-                email: true,
-                name: true,
-                cpf: true
-            }
+            omit: {password: true}
         })
 
         const payload = {id: customer.id, sub: customer.id}
