@@ -34,7 +34,7 @@ Ele funciona de forma bem semelhante ao github 😁
 
 Por fim, após setado o banco de dados, você já consegue rodar os comandos iniciais.
 
-## Compilando e rodando o projeto 👨‍💻
+## Compilando e rodando o projeto ▶️
 
 Utilize os comando abaixos para rodar o projeto, o primeiro rodando normalmente e o segundo no modo dev para atualizar automaticamente quando há alguma mudança:
 
@@ -67,14 +67,15 @@ Esse projeto foi upado em um serviço de nuvem (railway). Tanto o código em si 
 
 # Ferramentas e escolhas técnicas 🔨
 
-- NestJs: O framework mais conhecido e fomentado pela comunidade em Nodejs, traz ótimas vantagens no seu desenvolvimento, como por exemplo:
+- **NestJs:** O framework mais conhecido e fomentado pela comunidade em Nodejs, traz ótimas vantagens no seu desenvolvimento, como por exemplo:
     - Bem documentado;
     - Comunidade muito ativa, fazendo com que tenham muitos tópicos abertos tanto no stack overflow, quanto na comunidade do discord, além da comunidade sempre contribuir para melhoria contínua;
     - Agilidade no desenvolvimento, pelos comandos `nest g ...`, facilita e já vem com uma arquitetura pronta, utilizando de services, controllers e modules.
-- MySQL: Foi escolhido um banco de dados relacional MySQL por ter algumas relações entre as entidades criadas e também é um banco consolidado. O ponto principal que levou essa escolha em relação ao Postgres, por exemplo, é pelo menor consumo de CPU e RAM quando o projeto foi alocado na nuvem, mas o Postgres acaba sendo a escolha certa quando o assunto é performance.
-- Prisma: A escolha da ORM se deve ao fato de se manter simples no desenvolvimento, além de gerar as tipagens automaticamente e trazer features muito interessantes como o Prisma Studio, também é bem intuitivo e bem documentado.
-- AWS/SQS: Serviço de filas da Amazon, traz robustez e permite fazer muitas configurações em seu painel, sendo capaz de configurar DLQs e políticas de retentativa. Além de que, uma vez usando esse serviço, fica mais fácil configurar outros serviços fornecidos pela AWS, como bucket s3, Lambdas, Dynamo, etc.
-- Swagger: Escolha para documentação, oferece uma forma simples de deixar o projeto documentado, além de permitir fazer testes pela própria interface como se fosse no Postman.
+- **MySQL:** Foi escolhido um banco de dados relacional MySQL por ter algumas relações entre as entidades criadas e também é um banco consolidado. O ponto principal que levou essa escolha em relação ao Postgres, por exemplo, é pelo menor consumo de CPU e RAM quando o projeto foi alocado na nuvem, mas o Postgres acaba sendo a escolha certa quando o assunto é performance.
+- **Prisma:** A escolha da ORM se deve ao fato de se manter simples no desenvolvimento, além de gerar as tipagens automaticamente e trazer features muito interessantes como o Prisma Studio, também é bem intuitivo e bem documentado.
+- **AWS/SQS:** Serviço de filas da Amazon, traz robustez e permite fazer muitas configurações em seu painel, sendo capaz de configurar DLQs e políticas de retentativa. Além de que, uma vez usando esse serviço, fica mais fácil configurar outros serviços fornecidos pela AWS, como bucket s3, Lambdas, Dynamo, etc.
+- **Swagger:** Escolha para documentação, oferece uma forma simples de deixar o projeto documentado, além de permitir fazer testes pela própria interface como se fosse no Postman.
+- **Railway:** O serviço escolhido para subir o projeto. Das opções que já utilizei, railway se mostrou a mais competente para hospedar gratuitamente meus projetos, trazendo uma interface simples e intuitiva, possibilitando várias configurações e um bom free tier
 
 ## Processo de desenvolvimento 👨‍💻
 
