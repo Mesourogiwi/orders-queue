@@ -50,7 +50,8 @@ export class CreateOrderListener {
                 await tx.orderItems.create({
                     data: {
                         orderId: data.id,
-                        itemId: item.id
+                        itemId: item.id,
+                        itemQuantity: item.quantity
                     }
                 })
                 await tx.item.update({
