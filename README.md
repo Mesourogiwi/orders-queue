@@ -32,7 +32,13 @@ Ele funciona de forma bem semelhante ao github 😁
 
 2. A segunda forma é simplesmente solicitando as variáveis e eu respondo pelo e-mail fornecendo, assim você consegue rodar o projeto localmente sem problemas.
 
-Por fim, após setado o banco de dados, você já consegue rodar os comandos iniciais.
+Por fim, após setado as variáveis de ambiente no .env, caso esteja rodando o banco de dados localmente, execute o comando:
+
+```bash
+$ npx prisma migrate dev
+```
+
+Para criar as tabelas e seus respectivos campos.
 
 ## Compilando e rodando o projeto ▶️
 
