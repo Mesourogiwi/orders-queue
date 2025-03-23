@@ -18,7 +18,7 @@ export class OrdersController {
 
     @Get('getById/:id')
     findOne(@Param('id') id: string) {
-        return this.ordersService.getdOrderById(id)
+        return this.ordersService.getOrderById(id)
     }
 
     @Get('getByCustomerId/:customerid')

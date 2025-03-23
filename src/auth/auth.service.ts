@@ -3,11 +3,7 @@ import * as bcrypt from 'bcrypt'
 import {JwtService} from '@nestjs/jwt'
 import {PrismaService} from '../prisma.service'
 import {Customer} from '@prisma/client'
-
-type signInParams = {
-    cpf: string
-    password: string
-}
+import {SignInDto} from './dto/signIn.dto'
 
 type signInResponse = {
     accessToken: string
@@ -20,8 +16,8 @@ export class AuthService {
         private readonly prisma: PrismaService
     ) {}
 
-    async signIn(params: signInParams): Promise<signInResponse> {
-        const {cpf, password} = params
+    async signIn(signInInput: SignInDto): Promise<signInResponse> {
+        const {cpf, password} = signInInput
         const customer = await this.prisma.customer.findUnique({where: {cpf}})
 
         const isPasswordValid = customer && (await bcrypt.compare(password, customer.password))
