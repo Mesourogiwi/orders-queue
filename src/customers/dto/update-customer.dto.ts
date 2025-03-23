@@ -1,9 +1,7 @@
-import {PartialType} from '@nestjs/mapped-types'
-import {CreateCustomerDto} from './create-customer.dto'
 import {IsAlpha, IsEmail, IsOptional} from 'class-validator'
 import {ApiProperty} from '@nestjs/swagger'
 
-export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {
+export class UpdateCustomerDto {
     @IsOptional()
     @IsEmail()
     @ApiProperty({

@@ -114,7 +114,11 @@ export class CustomersService {
             })
         }
 
-        const updatedCustomer = await this.prisma.customer.update({where: {id: customerId}, data})
+        const updatedCustomer = await this.prisma.customer.update({
+            where: {id: customerId},
+            data,
+            omit: {password: true}
+        })
 
         return updatedCustomer
     }

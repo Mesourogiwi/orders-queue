@@ -1,9 +1,7 @@
-import {PartialType} from '@nestjs/mapped-types'
 import {IsAlphanumeric, IsNumber, IsOptional} from 'class-validator'
-import {CreateItemDto} from './create-item.dto'
 import {ApiProperty} from '@nestjs/swagger'
 
-export class UpdateItemDto extends PartialType(CreateItemDto) {
+export class UpdateItemDto {
     @IsAlphanumeric()
     @IsOptional()
     @ApiProperty({
@@ -12,7 +10,7 @@ export class UpdateItemDto extends PartialType(CreateItemDto) {
         required: true,
         type: String
     })
-    name: string
+    name?: string
 
     @IsNumber()
     @IsOptional()
@@ -22,7 +20,7 @@ export class UpdateItemDto extends PartialType(CreateItemDto) {
         required: true,
         type: Number
     })
-    price: number
+    price?: number
 
     @IsNumber()
     @IsOptional()
@@ -32,5 +30,5 @@ export class UpdateItemDto extends PartialType(CreateItemDto) {
         required: true,
         type: Number
     })
-    quantity: number
+    quantity?: number
 }
