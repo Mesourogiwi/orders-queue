@@ -69,7 +69,7 @@ Após rodar o comando para semar o banco de dados com um usuário do tipo `ADMIN
 1. Logar com o usuário ADMIN através do endpoint `POST /auth/login`, passando o cpf e senha no corpo da requisição e pegar seu respectivo token;
 2. Acessar o endpoint para criar um novo item `POST /items`, passando o nome, preço e quantidade em estoque do item;
 3. Cadastrar um novo usuário do tipo `CUSTOMER`, através do endpoint `POST /customers`, passando cpf, email, nome e senha no corpo da requisição.;
-   3.1 Para isso, é necessário passar um cpf válido, recomendo que use um gerador de cpf como esse [site](https://www.4devs.com.br/gerador_de_cpf)
+   3.1. Para isso, é necessário passar um cpf válido, recomendo que use um gerador de cpf como esse [site](https://www.4devs.com.br/gerador_de_cpf)
 4. Criar um novo pedido através do endpoint `POST /orders`, passando o id do pedido, id do customer e um array `orderItems` passando o id do(s) item(s), bem como a quantidade
 5. Isso deve chamar a fila e, posteriormente, pode ser visualizado se o pedido foi criado pelo endpoint `GET /orders/:id` com o ID de pedido passado no passo anterior.
 
