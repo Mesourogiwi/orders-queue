@@ -86,6 +86,7 @@ O fluxo descrito acima é o fluxo feliz, mas recomendo fortemente fazer alguns t
 - Tentar criar um pedido com um ID já existente;
 - Tentar passar um customerId inválido na hora da criação de um pedido;
 - Tentar colocar uma quantidade maior de itens no pedido do que itens do estoque;
+- Tentar cadastrar um usuário já cadastrado, seja repetindo e-mail ou cpf;
 
 Além é claro, de testar TODOS os endpoints disponibilizados pela API.
 
