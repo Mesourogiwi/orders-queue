@@ -69,7 +69,11 @@ export class OrdersService {
     async findAll(): Promise<Order[]> {
         return await this.prisma.order.findMany({
             include: {
-                orderItems: true
+                orderItems: {
+                    include: {
+                        item: true
+                    }
+                }
             }
         })
     }
