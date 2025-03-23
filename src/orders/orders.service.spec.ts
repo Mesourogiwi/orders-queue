@@ -1,7 +1,6 @@
 import {Test, TestingModule} from '@nestjs/testing'
 import {OrdersService} from './orders.service'
 import {PrismaService} from '../prisma.service'
-import {JwtService} from '@nestjs/jwt'
 import {BadRequestException} from '@nestjs/common'
 import {faker} from '@faker-js/faker/locale/pt_BR'
 import {SqsService} from '../sqs/sqs.service'
@@ -29,10 +28,6 @@ describe('CustomersService', () => {
         sendMessage: jest.fn()
     }
 
-    // const jwtMockService = {
-    //     sign: jest.fn()
-    // }
-
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
@@ -45,10 +40,6 @@ describe('CustomersService', () => {
                     provide: SqsService,
                     useValue: sqsMock
                 }
-                // {
-                //     provide: JwtService,
-                //     useValue: jwtMockService
-                // }
             ]
         }).compile()
 

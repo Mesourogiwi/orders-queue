@@ -3,7 +3,7 @@ import {CreateOrderDto} from './dto/create-order.dto'
 import {PrismaService} from '../prisma.service'
 import {SqsService} from '../sqs/sqs.service'
 import {Order} from '@prisma/client'
-import {UpdateOrderDto} from './dto/update-order.dto copy'
+import {UpdateOrderDto} from './dto/update-order.dto'
 
 @Injectable()
 export class OrdersService {
@@ -66,7 +66,7 @@ export class OrdersService {
         }
     }
 
-    async findAll() {
+    async findAll(): Promise<Order[]> {
         return await this.prisma.order.findMany({
             include: {
                 orderItems: true
@@ -74,7 +74,7 @@ export class OrdersService {
         })
     }
 
-    async getOrderById(id: string) {
+    async getOrderById(id: string): Promise<Order | null> {
         return await this.prisma.order.findUnique({
             include: {
                 orderItems: {
@@ -89,7 +89,7 @@ export class OrdersService {
         })
     }
 
-    async findOrdersByCustomerId(customerId: string) {
+    async findOrdersByCustomerId(customerId: string): Promise<Order[]> {
         return await this.prisma.order.findMany({
             include: {
                 orderItems: {

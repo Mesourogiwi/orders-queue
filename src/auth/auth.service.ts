@@ -5,7 +5,7 @@ import {PrismaService} from '../prisma.service'
 import {Customer} from '@prisma/client'
 import {SignInDto} from './dto/signIn.dto'
 
-type signInResponse = {
+export type signInResponse = {
     accessToken: string
     customer: Omit<Customer, 'password' | 'createdAt' | 'updatedAt'>
 }

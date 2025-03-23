@@ -12,7 +12,7 @@ export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {
         required: true,
         type: String
     })
-    email: string
+    email?: string
 
     @IsOptional()
     @IsAlpha()
@@ -22,5 +22,14 @@ export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {
         required: true,
         type: String
     })
-    name: string
+    name?: string
+
+    @IsOptional()
+    @ApiProperty({
+        description: 'Senha do cliente',
+        example: 'Senha123!',
+        required: true,
+        type: String
+    })
+    password?: string
 }

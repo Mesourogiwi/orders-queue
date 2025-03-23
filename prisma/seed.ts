@@ -6,9 +6,9 @@ const seed = async () => {
     await prisma.customer.create({
         data: {
             name: 'Admin',
-            email: process.env.ADMIN_EMAIL!,
-            cpf: process.env.ADMIN_CPF!,
-            password: await bcrypt.hash(process.env.ADMIN_PASSWORD!, 10),
+            email: process.env.ADMIN_SEED_EMAIL!,
+            cpf: process.env.ADMIN_SEED_CPF!,
+            password: await bcrypt.hash(process.env.ADMIN_SEED_PASSWORD!, 10),
             role: 'ADMIN'
         }
     })

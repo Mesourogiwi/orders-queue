@@ -11,7 +11,7 @@ export class CustomersController {
 
     @Public()
     @Post()
-    create(@Body() createCustomerDto: CreateCustomerDto) {
+    createCustomer(@Body() createCustomerDto: CreateCustomerDto) {
         return this.customersService.createCustomer(createCustomerDto)
     }
 

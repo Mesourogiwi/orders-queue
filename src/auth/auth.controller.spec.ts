@@ -1,18 +1,56 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController } from './auth.controller';
-
+import {Test} from '@nestjs/testing'
+import {Roles} from '@prisma/client'
+import {faker} from '@faker-js/faker/locale/pt_BR'
+import {PrismaService} from '../prisma.service'
+import {SignInDto} from './dto/signIn.dto'
+import {AuthController} from './auth.controller'
+import {AuthService, signInResponse} from './auth.service'
+import {JwtService} from '@nestjs/jwt'
 describe('AuthController', () => {
-  let controller: AuthController;
+    const signInResponse: signInResponse = {
+        accessToken: faker.string.uuid(),
+        customer: {
+            id: faker.string.uuid(),
+            name: faker.person.firstName(),
+            email: faker.internet.email(),
+            cpf: faker.string.numeric(11),
+            role: Roles.CUSTOMER
+        }
+    }
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [AuthController],
-    }).compile();
+    let authController: AuthController
+    let authService: AuthService
 
-    controller = module.get<AuthController>(AuthController);
-  });
+    beforeEach(async () => {
+        const moduleRef = await Test.createTestingModule({
+            controllers: [AuthController],
+            providers: [
+                PrismaService,
+                JwtService,
+                {
+                    provide: AuthService,
+                    useValue: {
+                        signIn: jest
+                            .fn<Promise<signInResponse>, [SignInDto]>()
+                            .mockImplementation(async () => signInResponse)
+                    }
+                }
+            ]
+        }).compile()
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
-});
+        authService = moduleRef.get(AuthService)
+        authController = moduleRef.get(AuthController)
+    })
+
+    describe('signIn', () => {
+        it('should return a signInResponse', async () => {
+            const result = signInResponse
+
+            const signInParams: SignInDto = {
+                cpf: faker.string.numeric(11),
+                password: faker.internet.password()
+            }
+            expect(await authController.signIn(signInParams)).toStrictEqual(result)
+        })
+    })
+})
