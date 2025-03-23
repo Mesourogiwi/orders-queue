@@ -16,6 +16,12 @@ describe('CustomersService', () => {
             findUnique: jest.fn(),
             create: jest.fn(),
             update: jest.fn()
+        },
+        customer: {
+            findUnique: jest.fn()
+        },
+        item: {
+            findUnique: jest.fn()
         }
     }
 
@@ -54,14 +60,81 @@ describe('CustomersService', () => {
     })
 
     describe('test createOrder', () => {
-        it('should create an order', async () => {
+        it('should throw an error if order already exists', async () => {
+            const orderId = faker.string.uuid()
             const createOrderInput = {
-                id: faker.string.uuid(),
+                id: orderId,
                 customerId: faker.string.uuid(),
                 orderItems: [
                     {id: faker.string.uuid(), quantity: faker.number.int({min: 1, max: 10})}
                 ]
             }
+
+            prismaMock.order.findUnique.mockResolvedValue(orderId)
+
+            await expect(service.createOrder(createOrderInput)).rejects.toThrow()
+        })
+
+        it('should throw an error if customer not found', async () => {
+            const customerId = faker.string.uuid()
+            const createOrderInput = {
+                id: faker.string.uuid(),
+                customerId: customerId,
+                orderItems: [
+                    {id: faker.string.uuid(), quantity: faker.number.int({min: 1, max: 10})}
+                ]
+            }
+
+            prismaMock.order.findUnique.mockResolvedValue(null)
+            prismaMock.customer.findUnique.mockResolvedValue(null)
+
+            await expect(service.createOrder(createOrderInput)).rejects.toThrow()
+        })
+
+        it('should throw an error if item does not exist', async () => {
+            const customerId = faker.string.uuid()
+            const createOrderInput = {
+                id: faker.string.uuid(),
+                customerId: customerId,
+                orderItems: [
+                    {id: faker.string.uuid(), quantity: faker.number.int({min: 1, max: 10})}
+                ]
+            }
+
+            prismaMock.order.findUnique.mockResolvedValue(null)
+            prismaMock.customer.findUnique.mockResolvedValue(customerId)
+            prismaMock.item.findUnique.mockResolvedValue(null)
+
+            await expect(service.createOrder(createOrderInput)).rejects.toThrow()
+        })
+
+        it('should throw an error if item quantity is grater than stock', async () => {
+            const customerId = faker.string.uuid()
+            const itemId = faker.string.uuid()
+            const createOrderInput = {
+                id: faker.string.uuid(),
+                customerId: customerId,
+                orderItems: [{id: itemId, quantity: 2}]
+            }
+
+            prismaMock.order.findUnique.mockResolvedValue(null)
+            prismaMock.customer.findUnique.mockResolvedValue(customerId)
+            prismaMock.item.findUnique.mockResolvedValue({id: itemId, quantity: 1})
+
+            await expect(service.createOrder(createOrderInput)).rejects.toThrow()
+        })
+        it('should create an order', async () => {
+            const customerId = faker.string.uuid()
+            const itemId = faker.string.uuid()
+            const createOrderInput = {
+                id: faker.string.uuid(),
+                customerId: customerId,
+                orderItems: [{id: itemId, quantity: 5}]
+            }
+
+            prismaMock.order.findUnique.mockResolvedValue(null)
+            prismaMock.customer.findUnique.mockResolvedValue(customerId)
+            prismaMock.item.findUnique.mockResolvedValue({id: itemId, quantity: 10})
 
             await service.createOrder(createOrderInput)
 

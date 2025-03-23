@@ -2,7 +2,7 @@ import {BadRequestException, Injectable} from '@nestjs/common'
 import {CreateOrderDto} from './dto/create-order.dto'
 import {PrismaService} from '../prisma.service'
 import {SqsService} from '../sqs/sqs.service'
-import {Order, OrderStatus} from '@prisma/client'
+import {Order} from '@prisma/client'
 import {UpdateOrderDto} from './dto/update-order.dto copy'
 
 @Injectable()
@@ -12,9 +12,51 @@ export class OrdersService {
         private readonly sqsService: SqsService
     ) {}
     async createOrder(createOrderDto: CreateOrderDto) {
+        const existingOrder = await this.prisma.order.findUnique({where: {id: createOrderDto.id}})
+
+        if (existingOrder) {
+            throw new BadRequestException('Order already exists', {
+                cause: new Error('Order already exists'),
+                description: `Pedido com id ${createOrderDto.id} já existe na base.`
+            })
+        }
+
+        const customer = await this.prisma.customer.findUnique({
+            where: {id: createOrderDto.customerId}
+        })
+
+        if (!customer) {
+            throw new BadRequestException('Customer not found', {
+                cause: new Error('Customer not found'),
+                description: `Usuário com id ${createOrderDto.customerId} não foi encontrado na base.`
+            })
+        }
+
+        let totalAmount = 0
+
+        for (const item of createOrderDto.orderItems) {
+            const existingItem = await this.prisma.item.findUnique({where: {id: item.id}})
+
+            if (!existingItem) {
+                throw new BadRequestException('Item not found', {
+                    cause: new Error('Item not found'),
+                    description: `Item com id ${item.id} não foi encontrado na base.`
+                })
+            }
+
+            if (existingItem.quantity < item.quantity) {
+                throw new BadRequestException('Not enough stock', {
+                    cause: new Error('Not enough stock'),
+                    description: `Quantidade insuficiente no estoque.`
+                })
+            }
+
+            totalAmount += existingItem.price * item.quantity
+        }
+
         const payload = {
             eventName: 'order.created',
-            data: createOrderDto,
+            data: {...createOrderDto, totalAmount},
             timestamp: new Date().toISOString()
         }
 

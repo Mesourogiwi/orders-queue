@@ -3,38 +3,13 @@ import {PrismaService} from '../../prisma.service'
 import {CreateOrderDto} from '../dto/create-order.dto'
 import {Order, OrderStatus} from '@prisma/client'
 
+type messageData = CreateOrderDto & {
+    totalAmount: number
+}
 @Injectable()
 export class CreateOrderListener {
     constructor(private readonly prisma: PrismaService) {}
-    async handle(data: CreateOrderDto) {
-        const existingOrder = await this.prisma.order.findUnique({where: {id: data.id}})
-
-        if (existingOrder) {
-            throw new Error('Order already exists')
-        }
-
-        const customer = await this.prisma.customer.findUnique({where: {id: data.customerId}})
-
-        if (!customer) {
-            throw new Error('Customer not found')
-        }
-
-        let totalAmount = 0
-
-        for (const item of data.orderItems) {
-            const existingItem = await this.prisma.item.findUnique({where: {id: item.id}})
-
-            if (!existingItem) {
-                throw new Error('Item not found')
-            }
-
-            if (existingItem.quantity < item.quantity) {
-                throw new Error('Insufficient quantity of item')
-            }
-
-            totalAmount += existingItem.price * item.quantity
-        }
-
+    async handle(data: messageData) {
         let order: Order | null = null
 
         await this.prisma.$transaction(async tx => {
@@ -42,7 +17,7 @@ export class CreateOrderListener {
                 data: {
                     id: data.id,
                     customerId: data.customerId,
-                    totalAmount,
+                    totalAmount: data.totalAmount,
                     orderStatus: OrderStatus.PENDING_PAYMENT
                 }
             })
