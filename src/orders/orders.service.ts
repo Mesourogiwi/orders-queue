@@ -1,14 +1,13 @@
 import {Injectable} from '@nestjs/common'
 import {CreateOrderDto} from './dto/create-order.dto'
 import {PrismaService} from '../prisma.service'
-import {Order} from '@prisma/client'
 import {SqsService} from '../sqs/sqs.service'
 
 @Injectable()
 export class OrdersService {
     constructor(
         private readonly prisma: PrismaService,
-        private sqsService: SqsService
+        private readonly sqsService: SqsService
     ) {}
     async createOrder(createOrderDto: CreateOrderDto) {
         const payload = {
@@ -23,17 +22,16 @@ export class OrdersService {
         }
     }
 
-    findAll() {
-        return this.prisma.orderItems.findMany({
+    async findAll() {
+        return await this.prisma.order.findMany({
             include: {
-                item: true,
-                order: true
+                orderItems: true
             }
         })
     }
 
-    getdOrderById(id: string) {
-        return this.prisma.order.findUnique({
+    async getOrderById(id: string) {
+        return await this.prisma.order.findUnique({
             include: {
                 orderItems: {
                     include: {
@@ -47,8 +45,8 @@ export class OrdersService {
         })
     }
 
-    findOrdersByCustomerId(customerId: string) {
-        return this.prisma.order.findMany({
+    async findOrdersByCustomerId(customerId: string) {
+        return await this.prisma.order.findMany({
             include: {
                 orderItems: {
                     include: {

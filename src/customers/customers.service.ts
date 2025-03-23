@@ -83,7 +83,10 @@ export class CustomersService {
         })
 
         if (!customer) {
-            throw new Error('Customer not found')
+            throw new BadRequestException('Customer not found', {
+                cause: customerId,
+                description: `Usuário com id ${customerId} não encontado`
+            })
         }
         return customer
     }
@@ -95,7 +98,10 @@ export class CustomersService {
         })
 
         if (!customer) {
-            throw new Error('Customer not found')
+            throw new BadRequestException('Customer not found', {
+                cause: cpf,
+                description: `Usuário com cpf ${cpf} não encontrado`
+            })
         }
         return customer
     }
@@ -110,7 +116,10 @@ export class CustomersService {
         })
 
         if (!customer) {
-            throw new Error('Customer not found')
+            throw new BadRequestException('Customer not found', {
+                cause: customerId,
+                description: `Usuário com id ${customerId} não encontado`
+            })
         }
 
         const updatedCustomer = await this.prisma.customer.update({where: {id: customerId}, data})
@@ -119,6 +128,17 @@ export class CustomersService {
     }
 
     async remove(customerId: string): Promise<boolean> {
+        const customer = await this.prisma.customer.findUnique({
+            where: {id: customerId},
+            omit: {password: true}
+        })
+
+        if (!customer) {
+            throw new BadRequestException('Customer not found', {
+                cause: customerId,
+                description: `Usuário com id ${customerId} não encontado`
+            })
+        }
         await this.prisma.customer.delete({where: {id: customerId}})
 
         return true
