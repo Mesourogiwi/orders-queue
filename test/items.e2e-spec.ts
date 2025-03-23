@@ -8,7 +8,7 @@ import {CreateItemDto} from '../src/items/dto/create-item.dto'
 import {UpdateItemDto} from '../src/items/dto/update-item.dto'
 import {Item} from '@prisma/client'
 
-describe('Customers e2e', () => {
+describe('Items e2e', () => {
     const itemResponseObject: Item = {
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -18,7 +18,7 @@ describe('Customers e2e', () => {
         quantity: 10
     }
     let app: INestApplication
-    let ordersService = {
+    let itemsService = {
         findAll: () => [itemResponseObject],
         create: () => itemResponseObject,
         getById: () => itemResponseObject,
@@ -31,7 +31,7 @@ describe('Customers e2e', () => {
             imports: [ItemsModule]
         })
             .overrideProvider(ItemsService)
-            .useValue(ordersService)
+            .useValue(itemsService)
             .compile()
 
         app = moduleRef.createNestApplication()

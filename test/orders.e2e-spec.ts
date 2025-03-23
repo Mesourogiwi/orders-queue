@@ -7,7 +7,7 @@ import {Order, OrderStatus} from '@prisma/client'
 import {faker} from '@faker-js/faker/locale/pt_BR'
 import {CreateOrderDto} from '../src/orders/dto/create-order.dto'
 
-describe('Orders', () => {
+describe('Orders e2e', () => {
     const orderResponseObject: Order = {
         createdAt: new Date(),
         id: faker.string.uuid(),

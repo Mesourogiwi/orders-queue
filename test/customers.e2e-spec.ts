@@ -21,7 +21,7 @@ describe('Customers e2e', () => {
     }
     const accessToken = faker.string.uuid()
     let app: INestApplication
-    let ordersService = {
+    let customersService = {
         findAll: () => [customerResponseObject],
         createCustomer: () => ({
             ...customerResponseObject,
@@ -40,7 +40,7 @@ describe('Customers e2e', () => {
             imports: [CustomersModule]
         })
             .overrideProvider(CustomersService)
-            .useValue(ordersService)
+            .useValue(customersService)
             .compile()
 
         app = moduleRef.createNestApplication()
