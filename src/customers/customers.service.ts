@@ -101,10 +101,7 @@ export class CustomersService {
         return customer
     }
 
-    async update(
-        customerId: string,
-        data: Partial<Prisma.CustomerCreateInput>
-    ): Promise<CustomerResponse> {
+    async update(customerId: string, data: Partial<UpdateCustomerDto>): Promise<CustomerResponse> {
         const customer = await this.prisma.customer.findUnique({
             where: {id: customerId},
             omit: {password: true}

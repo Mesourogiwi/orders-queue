@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common'
 import {PrismaService} from '../../prisma.service'
 import {CreateOrderDto} from '../dto/create-order.dto'
-import {Order} from '@prisma/client'
+import {Order, OrderStatus} from '@prisma/client'
 
 @Injectable()
 export class CreateOrderListener {
@@ -42,7 +42,8 @@ export class CreateOrderListener {
                 data: {
                     id: data.id,
                     customerId: data.customerId,
-                    totalAmount
+                    totalAmount,
+                    orderStatus: OrderStatus.PENDING_PAYMENT
                 }
             })
 

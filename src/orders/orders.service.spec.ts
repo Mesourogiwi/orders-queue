@@ -5,6 +5,7 @@ import {JwtService} from '@nestjs/jwt'
 import {BadRequestException} from '@nestjs/common'
 import {faker} from '@faker-js/faker/locale/pt_BR'
 import {SqsService} from '../sqs/sqs.service'
+import {OrderStatus} from '@prisma/client'
 
 describe('CustomersService', () => {
     let service: OrdersService
@@ -14,8 +15,7 @@ describe('CustomersService', () => {
             findMany: jest.fn(),
             findUnique: jest.fn(),
             create: jest.fn(),
-            update: jest.fn(),
-            delete: jest.fn()
+            update: jest.fn()
         }
     }
 
@@ -69,7 +69,7 @@ describe('CustomersService', () => {
         })
     })
 
-    describe('test finadAll orders', () => {
+    describe('test findAll orders', () => {
         it('should find all orders', async () => {
             const mockOrders = [{id: faker.string.uuid()}, {id: faker.string.uuid()}]
             prismaMock.order.findMany.mockResolvedValue(mockOrders)
@@ -105,6 +105,33 @@ describe('CustomersService', () => {
             expect(order).toBeDefined()
             expect(order?.length).toBeGreaterThan(0)
             expect(order?.[0].customerId).toEqual(customerId)
+        })
+    })
+
+    describe('test update order status', () => {
+        it('should throw error if order not found', async () => {
+            const orderId = faker.string.uuid()
+            prismaMock.order.findUnique.mockResolvedValue(null)
+
+            await expect(
+                service.updateOrderStatus(orderId, {orderStatus: OrderStatus.APPROVED})
+            ).rejects.toThrow(BadRequestException)
+        })
+
+        it('should update order status', async () => {
+            const orderId = faker.string.uuid()
+            const mockOrder = {id: orderId}
+            const updatedOrderMock = {id: orderId, orderStatus: OrderStatus.APPROVED}
+            prismaMock.order.findUnique.mockResolvedValue(mockOrder)
+            prismaMock.order.update.mockResolvedValue(updatedOrderMock)
+
+            const order = await service.updateOrderStatus(orderId, {
+                orderStatus: OrderStatus.APPROVED
+            })
+
+            expect(order).toBeDefined()
+            expect(prismaMock.order.update).toHaveBeenCalledTimes(1)
+            expect(order?.orderStatus).toEqual(OrderStatus.APPROVED)
         })
     })
 })

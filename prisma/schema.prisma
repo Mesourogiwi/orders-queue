@@ -47,12 +47,22 @@ model OrderItems {
   @@index([orderId])
 }
 
+enum OrderStatus {
+  PENDING_PAYMENT
+  APPROVED
+  IN_SEPARATION
+  IN_TRANSPORTATION
+  DELIVERED
+  CANCELED
+}
+
 model Order {
   id          String       @id @unique
   totalAmount Float
   customerId  String       @unique
   customer    Customer     @relation(fields: [customerId], references: [id])
   orderItems  OrderItems[]
+  orderStatus OrderStatus
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
