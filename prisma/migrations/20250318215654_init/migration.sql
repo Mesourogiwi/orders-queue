@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE `Customer` (
+CREATE TABLE `customer` (
     `id` VARCHAR(191) NOT NULL,
     `cpf` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE `Customer` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Item` (
+CREATE TABLE `item` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `quantity` INTEGER NOT NULL,
@@ -19,23 +19,23 @@ CREATE TABLE `Item` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `OrderItems` (
+CREATE TABLE `orderItems` (
     `id` VARCHAR(191) NOT NULL,
     `itemId` VARCHAR(191) NOT NULL,
     `orderId` VARCHAR(191) NOT NULL,
 
-    INDEX `OrderItems_itemId_idx`(`itemId`),
-    INDEX `OrderItems_orderId_idx`(`orderId`),
+    INDEX `orderItems_itemId_idx`(`itemId`),
+    INDEX `orderItems_orderId_idx`(`orderId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Order` (
+CREATE TABLE `order` (
     `id` VARCHAR(191) NOT NULL,
     `totalAmount` DOUBLE NOT NULL,
     `customerId` VARCHAR(191) NOT NULL,
 
-    UNIQUE INDEX `Order_id_key`(`id`),
-    UNIQUE INDEX `Order_customerId_key`(`customerId`),
+    UNIQUE INDEX `order_id_key`(`id`),
+    UNIQUE INDEX `order_customerId_key`(`customerId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

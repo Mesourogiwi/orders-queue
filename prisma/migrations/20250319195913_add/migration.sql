@@ -10,7 +10,7 @@
 ALTER TABLE `customer` ADD COLUMN `name` VARCHAR(191) NOT NULL;
 
 -- CreateIndex
-CREATE UNIQUE INDEX `Customer_cpf_key` ON `Customer`(`cpf`);
+CREATE UNIQUE INDEX `customer_cpf_key` ON `customer`(`cpf`);
 
 -- CreateIndex
-CREATE UNIQUE INDEX `Customer_email_key` ON `Customer`(`email`);
+CREATE UNIQUE INDEX `customer_email_key` ON `customer`(`email`);
