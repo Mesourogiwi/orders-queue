@@ -7,10 +7,10 @@
 
 */
 -- AlterTable
-ALTER TABLE `customer` ADD COLUMN `name` VARCHAR(191) NOT NULL;
+ALTER TABLE `Customer` ADD COLUMN `name` VARCHAR(191) NOT NULL;
 
 -- CreateIndex
-CREATE UNIQUE INDEX `customer_cpf_key` ON `customer`(`cpf`);
+CREATE UNIQUE INDEX `Customer_cpf_key` ON `Customer`(`cpf`);
 
 -- CreateIndex
-CREATE UNIQUE INDEX `customer_email_key` ON `customer`(`email`);
+CREATE UNIQUE INDEX `Customer_email_key` ON `Customer`(`email`);
